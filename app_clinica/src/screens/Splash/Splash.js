@@ -12,7 +12,7 @@ const Splash =({navigation}) => {
     return(
         <View style={styles.container}>
             <Image style={styles.logo} source={Logo}/>
-            <Text>Carregando....</Text>
+            <Text style= {styles.title}>Carregando....</Text>
         </View>
     );
 };
