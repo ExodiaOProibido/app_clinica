@@ -1,3 +1,4 @@
+import { setStatusBarBackgroundColor } from 'expo-status-bar';
 import React, {useEffect} from 'react';
 import {View, Text, Image, StyleSheet} from 'react-native';
 
