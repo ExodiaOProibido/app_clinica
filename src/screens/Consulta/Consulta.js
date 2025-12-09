@@ -5,7 +5,7 @@ import { View, Text, StyleSheet } from 'react-native';
 const Consulta = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Detalhes de Cunsulta</Text>
+      <Text style={styles.heading}>Detalhes de Consulta</Text>
       <Text>Esta interface será implementada futuramente.</Text>
     </View>
   );
