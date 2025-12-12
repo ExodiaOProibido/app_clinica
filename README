@@ -1,0 +1,19 @@
+FEITO POR:
+
+Hugo de Oliveira Porcari
+Guilhermi Enrique da Silva
+João Vitor Tamos de Jesus
+
+COMO RODAR O PROJETO:
+
+1- Clonar o repositorio do Github no local desejado ultilizando o comando "git clone https://github.com/ExodiaOProibido/app_clinica.git"
+2- Abra o projeto no Visual Studio Code
+3- 
+
+COMO RODAR NO MOBILE
+
+1- Conectar seu celular na rede linksys
+2- Instalar o aplicativo ExpoGo no seu celular
+3- Rodar o comando "npm install expo-cli"
+4- Rodar o comando "npx expo run"
+5- Scanear o QR code que aparece no console utilizando o aplicativo ExpoGo
