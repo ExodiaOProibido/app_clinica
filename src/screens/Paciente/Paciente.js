@@ -87,7 +87,7 @@ const PacienteCard = ({ paciente, navigation }) => {
       <TouchableOpacity onPress={toggleExpand} style={cardStyles.mainInfo}>
         <View>
           <Text style={cardStyles.nome}>{paciente.nome}</Text>
-          {/* 🎯 Mostra o CPF logo abaixo do nome */}
+          {/* Mostra o CPF logo abaixo do nome */}
           <Text style={cardStyles.infoSecundaria}>CPF: {paciente.cpf}</Text>
         </View>
 
@@ -121,7 +121,11 @@ const PacienteCard = ({ paciente, navigation }) => {
           <View style={cardStyles.actionButtons}>
             <Button
               title="Editar"
-              onPress={() => navigation.navigate("EmConstrucao")} // Deveria ser uma tela de edição
+              onPress={() =>
+                navigation.navigate("CadastroEdicaoPaciente", {
+                  paciente: paciente,
+                })
+              }
             />
             <Button
               title="Remover Paciente"
@@ -159,7 +163,6 @@ const PacienteOp1Screen = ({ navigation, pacientes }) => {
         />
         <Image source={IconeLupa} style={styles.searchIcon} />
       </View>
-
       {/* LISTA ROLÁVEL */}
       <View style={styles.listWrapper}>
         <SectionList
@@ -181,12 +184,12 @@ const PacienteOp1Screen = ({ navigation, pacientes }) => {
           )}
         />
       </View>
-
-      {/* BOTÃO FIXO (Não rolável) */}
       <View style={styles.fixedButtonContainer}>
         <Button
           title="Cadastrar Novo Paciente"
-          onPress={() => navigation.navigate("EmConstrucao")} // Exemplo
+          onPress={() =>
+            navigation.navigate("CadastroEdicaoPaciente", { paciente: null })
+          }
         />
       </View>
     </View>

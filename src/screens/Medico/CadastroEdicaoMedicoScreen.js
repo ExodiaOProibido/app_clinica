@@ -1,17 +1,14 @@
-import React from 'react';
-import MedicoForm from '../../components/MedicoForm'; // Ajuste o caminho
-import { View } from 'react-native';
+// src/screens/Medico/CadastroEdicaoMedicoScreen.js
+import React from "react";
+import MedicoForm from "../../components/MedicoForm";
+import { View } from "react-native";
 
-const CadastroEdicaoMedicoScreen = ({ route, navigation }) => {
+const CadastroEdicaoMedicoScreen = ({ route, navigation, onSave }) => {
   // A prop 'medico' virá via route.params
-  const { medico } = route.params || {};
+  const { medico } = route.params || {}; // A prop 'onSave' virá diretamente do App.js (via MedicoFormScreen wrapper) // O MedicoForm chama o onSave desta tela, que por sua vez chama o handleSaveMedico do App.js
 
   const handleSave = (novoDadosMedico) => {
-    // Aqui é onde você faria a chamada de API ou atualizaria o estado global
-    console.log('Dados a serem salvos/editados:', novoDadosMedico);
-    
-    // Supondo que você use uma função de contexto ou Redux para atualizar o estado
-    // Aqui, apenas chamamos o goBack() após o alerta no MedicoForm.js
+    onSave(novoDadosMedico); // O restante do fluxo (Alert.alert e navigation.goBack) está dentro do MedicoForm.js
   };
 
   const handleCancel = () => {
@@ -21,8 +18,8 @@ const CadastroEdicaoMedicoScreen = ({ route, navigation }) => {
   return (
     <View style={{ flex: 1 }}>
       <MedicoForm
-        medico={medico} // Passa o objeto médico (ou undefined/null)
-        onSave={handleSave}
+        medico={medico}
+        onSave={handleSave} // Passa o handler que executa o onSave do App.js
         onCancel={handleCancel}
         navigation={navigation}
       />

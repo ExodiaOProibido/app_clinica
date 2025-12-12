@@ -1,26 +1,20 @@
 // src/screens/Paciente/CadastroEdicaoPacienteScreen.js
-
 import React from "react";
-import PacienteForm from "../../components/PacienteForm"; // 🎯 Ajuste o caminho e importe o componente PacienteForm
+// ⚠️ ATENÇÃO: Verifique se o caminho e o nome do seu componente de formulário de paciente estão corretos
+import PacienteForm from "../../components/PacienteForm";
 import { View } from "react-native";
 
-/**
- * Tela de Cadastro/Edição de Paciente.
- * Reutiliza a estrutura do MedicoScreen, mas usa o PacienteForm.
- */
-const CadastroEdicaoPacienteScreen = ({ route, navigation }) => {
+// Este componente recebe 'onSave' como prop injetada pelo App.js
+const CadastroEdicaoPacienteScreen = ({ route, navigation, onSave }) => {
   // A prop 'paciente' virá via route.params
-  const { paciente } = route.params || {}; // 🎯 Alterado de 'medico' para 'paciente'
+  const { paciente } = route.params || {}; 
 
-  const handleSave = (novosDadosPaciente) => {
-    // ⚠️ ATENÇÃO: Aqui você deve implementar a lógica real de API/Estado
-    // para salvar ou editar os dados do paciente.
-    console.log(
-      "Dados do paciente a serem salvos/editados:",
-      novosDadosPaciente
-    );
-
-    // O retorno (navigation.goBack()) já é tratado dentro do PacienteForm
+  const handleSave = (novoDadosPaciente) => {
+    if (onSave) {
+      onSave(novoDadosPaciente);
+    } else {
+      console.error("Função onSave não foi injetada corretamente.");
+    }
   };
 
   const handleCancel = () => {
@@ -30,9 +24,8 @@ const CadastroEdicaoPacienteScreen = ({ route, navigation }) => {
   return (
     <View style={{ flex: 1 }}>
       <PacienteForm
-        // 🎯 Passa o objeto paciente (ou undefined/null se for novo cadastro)
         paciente={paciente}
-        onSave={handleSave}
+        onSave={handleSave} 
         onCancel={handleCancel}
         navigation={navigation}
       />

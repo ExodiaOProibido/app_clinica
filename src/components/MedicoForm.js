@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -7,9 +7,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
-  Platform, // Simulação de lista de seleção (Picker)
-  Picker,
+  Platform,
 } from "react-native";
+import { Picker } from "@react-native-picker/picker";
 
 // Lista de Especialidades para o Picker
 const especialidades = [
@@ -31,21 +31,38 @@ const initialMedicoState = {
   logradouro: "",
   numero: "",
   complemento: "",
-  bairro: "", 
+  bairro: "",
   cidade: "",
   uf: "",
   cep: "",
 };
 
-/**
- * Componente MedicoForm para Cadastro ou Edição.
- */
+const ValidatedInput = ({
+  label,
+  name,
+  formData,
+  errors,
+  handleChange,
+  ...props
+}) => (
+  <View style={formStyles.inputGroup}>
+    <Text style={formStyles.label}>{label}</Text>
+    <TextInput
+      style={[formStyles.input, errors[name] && formStyles.inputError]}
+      value={formData[name]}
+      onChangeText={(text) => handleChange(name, text)}
+      {...props}
+    />
+    {errors[name] && <Text style={formStyles.errorText}>{errors[name]}</Text>}
+  </View>
+);
+
 const MedicoForm = ({ medico, onSave, onCancel, navigation }) => {
   const [formData, setFormData] = useState(medico || initialMedicoState);
   const [errors, setErrors] = useState({});
 
   const isEditing = !!medico;
-  const buttonTitle = isEditing ? "Concluir Edição" : "Concluir Cadastro"; // 🔄 MODIFICAÇÃO 2: Adicionar 'bairro' aos campos obrigatórios
+  const buttonTitle = isEditing ? "Concluir Edição" : "Concluir Cadastro";
 
   const requiredFields = [
     "nome",
@@ -60,10 +77,6 @@ const MedicoForm = ({ medico, onSave, onCancel, navigation }) => {
     "uf",
     "cep",
   ];
-
-  useEffect(() => {
-    setFormData(medico || initialMedicoState);
-  }, [medico]);
 
   const handleChange = (name, value) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -99,54 +112,36 @@ const MedicoForm = ({ medico, onSave, onCancel, navigation }) => {
         isEditing
           ? "Dados do médico atualizados."
           : "Novo médico cadastrado com sucesso!"
-      ); // navigation.goBack();
+      );
+      navigation.goBack();
     } else {
       Alert.alert("Erro", "Por favor, preencha todos os campos obrigatórios.");
     }
-  }; // SUB-COMPONENTE: INPUT COM VALIDAÇÃO (Mantido)
-  const ValidatedInput = ({ label, name, ...props }) => (
-    <View style={formStyles.inputGroup}>
-            <Text style={formStyles.label}>{label}</Text>     {" "}
-      <TextInput
-        style={[formStyles.input, errors[name] && formStyles.inputError]}
-        value={formData[name]}
-        onChangeText={(text) => handleChange(name, text)}
-        {...props}
-      />
-           {" "}
-      {errors[name] && <Text style={formStyles.errorText}>{errors[name]}</Text>}
-         {" "}
-    </View>
-  );
+  };
 
   return (
     <View style={styles.container}>
-           {" "}
       <ScrollView contentContainerStyle={styles.scrollContent}>
-                       {" "}
         <Text style={styles.title}>
           {isEditing ? "Editar Perfil Médico" : "Novo Cadastro Médico"}
         </Text>
-               {" "}
-        {/* ====================================
-            1. PROFISSIONAL (Sem mudanças)
-            ==================================== */}
-                <Text style={styles.sectionHeader}>1. Profissional</Text>       {" "}
+        <Text style={styles.sectionHeader}>1. Profissional</Text>
         <ValidatedInput
           label="Nome Completo"
           name="nome"
           placeholder="Ex: Ana Maria da Silva"
+          formData={formData}
+          errors={errors}
+          handleChange={handleChange}
         />
-                        {/* Campo Especialidade (Picker) */}       {" "}
         <View style={formStyles.inputGroup}>
-                    <Text style={formStyles.label}>Especialidade</Text>         {" "}
+          <Text style={formStyles.label}>Especialidade</Text>
           <View
             style={[
               formStyles.pickerWrapper,
               errors.especialidade && formStyles.inputError,
             ]}
           >
-                       {" "}
             <Picker
               selectedValue={formData.especialidade}
               onValueChange={(itemValue) =>
@@ -154,94 +149,99 @@ const MedicoForm = ({ medico, onSave, onCancel, navigation }) => {
               }
               style={formStyles.picker}
             >
-                           {" "}
               {especialidades.map((esp) => (
                 <Picker.Item key={esp} label={esp} value={esp} />
               ))}
-                         {" "}
             </Picker>
-                     {" "}
           </View>
-                   {" "}
           {errors.especialidade && (
             <Text style={formStyles.errorText}>{errors.especialidade}</Text>
           )}
-                 {" "}
         </View>
-               {" "}
-        <ValidatedInput label="CRM" name="crm" placeholder="Ex: 12345/MG" />   
-           {" "}
-        {/* ====================================
-            2. CONTATOS (Sem mudanças)
-            ==================================== */}
-                <Text style={styles.sectionHeader}>2. Contatos</Text>       {" "}
+        <ValidatedInput
+          label="CRM"
+          name="crm"
+          placeholder="Ex: 12345/MG"
+          formData={formData}
+          errors={errors}
+          handleChange={handleChange}
+        />
+        <Text style={styles.sectionHeader}>2. Contatos</Text>
         <ValidatedInput
           label="Email"
           name="email"
           placeholder="email@exemplo.com"
           keyboardType="email-address"
+          formData={formData}
+          errors={errors}
+          handleChange={handleChange}
         />
-               {" "}
         <ValidatedInput
           label="Telefone Celular"
           name="telefone"
           placeholder="(XX) XXXXX-XXXX"
           keyboardType="phone-pad"
+          formData={formData}
+          errors={errors}
+          handleChange={handleChange}
         />
-               {" "}
-        {/* ====================================
-            3. ENDEREÇO PROFISSIONAL (Modificado)
-            ==================================== */}
-               {" "}
-        <Text style={styles.sectionHeader}>3. Endereço Profissional</Text>     
-         {" "}
+        <Text style={styles.sectionHeader}>3. Endereço Profissional</Text>
         <ValidatedInput
           label="Logradouro"
           name="logradouro"
           placeholder="Ex: Rua das Flores"
+          formData={formData}
+          errors={errors}
+          handleChange={handleChange}
         />
-               {" "}
         <View style={formStyles.row}>
-                   {" "}
           <ValidatedInput
             label="Número"
             name="numero"
             placeholder="Nº"
             keyboardType="numeric"
             style={formStyles.inputHalf}
+            formData={formData}
+            errors={errors}
+            handleChange={handleChange}
           />
-                   {" "}
           <ValidatedInput
             label="Complemento"
             name="complemento"
             placeholder="Apto/Sala (Opcional)"
             style={formStyles.inputHalf}
+            formData={formData}
+            errors={errors}
+            handleChange={handleChange}
           />
-                 {" "}
         </View>
-        {/* 🎯 NOVO INPUT: BAIRRO */}
         <ValidatedInput
           label="Bairro"
           name="bairro"
           placeholder="Ex: Savassi"
+          formData={formData}
+          errors={errors}
+          handleChange={handleChange}
         />
-               {" "}
         <ValidatedInput
           label="Cidade"
           name="cidade"
           placeholder="Ex: Belo Horizonte"
+          formData={formData} // Correção: Garantir que esta prop também seja passada
+          errors={errors}
+          handleChange={handleChange}
         />
-               {" "}
         <View style={formStyles.row}>
-                   {" "}
           <ValidatedInput
             label="UF"
             name="uf"
             placeholder="Ex: MG"
             maxLength={2}
             style={formStyles.inputQuarter}
+            formData={formData}
+            errors={errors}
+            handleChange={handleChange}
           />
-                   {" "}
           <ValidatedInput
             label="CEP"
             name="cep"
@@ -249,77 +249,29 @@ const MedicoForm = ({ medico, onSave, onCancel, navigation }) => {
             keyboardType="numeric"
             maxLength={9}
             style={formStyles.inputThreeQuarter}
+            formData={formData}
+            errors={errors}
+            handleChange={handleChange}
           />
-                 {" "}
         </View>
-             {" "}
       </ScrollView>
-            {/* BOTÕES FIXOS NA PARTE INFERIOR (Mantidos) */}     {" "}
       <View style={styles.buttonContainer}>
-               {" "}
         <TouchableOpacity
           style={[formStyles.button, formStyles.saveButton]}
           onPress={handleSubmit}
         >
-                    <Text style={formStyles.buttonText}>{buttonTitle}</Text>   
-             {" "}
+          <Text style={formStyles.buttonText}>{buttonTitle}</Text>
         </TouchableOpacity>
-                       {" "}
         <TouchableOpacity
           style={[formStyles.button, formStyles.cancelButton]}
           onPress={onCancel || (() => navigation.goBack())}
         >
-                    <Text style={formStyles.buttonText}>Cancelar</Text>       {" "}
+          <Text style={formStyles.buttonText}>Cancelar</Text>
         </TouchableOpacity>
-             {" "}
       </View>
-         {" "}
     </View>
   );
 };
-
-// =========================================================================
-// ESTILOS (Mantidos do código original)
-// =========================================================================
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-  scrollContent: {
-    padding: 20,
-    paddingBottom: 100, // Espaço para os botões fixos
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-    textAlign: "center",
-    color: "#333",
-  },
-  sectionHeader: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginTop: 20,
-    marginBottom: 10,
-    color: "#007AFF",
-    borderBottomWidth: 1,
-    borderBottomColor: "#eee",
-    paddingBottom: 5,
-  },
-  buttonContainer: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    padding: 10,
-    backgroundColor: "#fff",
-    borderTopWidth: 1,
-    borderTopColor: "#ddd",
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-});
 
 const formStyles = StyleSheet.create({
   inputGroup: {
@@ -395,6 +347,46 @@ const formStyles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
+  },
+});
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+  scrollContent: {
+    padding: 20,
+    paddingBottom: 100,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+    textAlign: "center",
+    color: "#333",
+  },
+  sectionHeader: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginTop: 20,
+    marginBottom: 10,
+    color: "#007AFF",
+    borderBottomWidth: 1,
+    borderBottomColor: "#eee",
+    paddingBottom: 5,
+  },
+  buttonContainer: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: 10,
+    backgroundColor: "#fff",
+    borderTopWidth: 1,
+    borderTopColor: "#ddd",
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 });
 

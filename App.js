@@ -12,12 +12,12 @@ import Consulta from "./src/screens/Consulta/Consulta";
 // 2. Imports de Telas de Listagem (Assumindo que estes são os arquivos com SectionList)
 // Se 'Medico.js' e 'Paciente.js' não exportam a tela de listagem, renomeie os imports
 // Assumindo que a listagem de médico se chama MedicoOp1Screen
-import MedicoOp1Screen from "./src/screens/Medico/Medico"; // 🎯 Ajuste: Se Medico.js exporta a tela de listagem
-import PacienteOp1Screen from "./src/screens/Paciente/Paciente"; // 🎯 Ajuste: Se Paciente.js exporta a tela de listagem
+import MedicoOp1Screen from "./src/screens/Medico/Medico"; //  Ajuste: Se Medico.js exporta a tela de listagem
+import PacienteOp1Screen from "./src/screens/Paciente/Paciente"; //  Ajuste: Se Paciente.js exporta a tela de listagem
 
 // 3. Imports de Formulários (Cadastro/Edição)
 import CadastroEdicaoMedicoScreen from "./src/screens/Medico/CadastroEdicaoMedicoScreen";
-// 🎯 CORREÇÃO: Renomear o import para Pacientes para evitar conflito de nomes
+//  CORREÇÃO: Renomear o import para Pacientes para evitar conflito de nomes
 import CadastroEdicaoPacienteScreen from "./src/screens/Paciente/CadastroEdicaoPacienteScreen";
 
 const Stack = createStackNavigator();
@@ -119,6 +119,21 @@ function App() {
     // Usa o componente de listagem de paciente (assumido)
     <PacienteOp1Screen {...props} pacientes={pacientes} />
   );
+  // Função para lidar com o salvamento/edição de medicos
+  const handleSaveMedico = (medicoData) => {
+    if (medicoData.id) {
+      // Lógica de Edição (Mock): Atualiza o médico existente
+      setMedicos((prev) =>
+        prev.map((m) => (m.id === medicoData.id ? medicoData : m))
+      );
+    } else {
+      // Lógica de Cadastro (Mock): Cria um novo ID e adiciona
+      // Gera um novo ID baseado no maior ID existente
+      const newId = Math.max(...medicos.map((m) => m.id), 0) + 1;
+      setMedicos((prev) => [...prev, { ...medicoData, id: newId }]);
+    }
+    console.log("Médico salvo com sucesso:", medicoData);
+  };
 
   // Função para lidar com o salvamento/edição de pacientes
   const handleSavePaciente = (pacienteData) => {
@@ -134,10 +149,12 @@ function App() {
 
   // Componente wrapper para injetar a função onSave no formulário de paciente
   const PacienteFormScreen = (props) => (
-    <CadastroEdicaoPacienteScreen
-      {...props}
-      onSave={handleSavePaciente} // Injete a função de salvar
-    />
+    <CadastroEdicaoPacienteScreen {...props} onSave={handleSavePaciente} />
+  );
+
+  // Wrapper para o Formulário de Médico injetando o onSave
+  const MedicoFormScreen = (props) => (
+    <CadastroEdicaoMedicoScreen {...props} onSave={handleSaveMedico} />
   );
 
   return (
@@ -175,30 +192,13 @@ function App() {
         {/* Formulários (Cadastro/Edição) */}
         <Stack.Screen
           name="CadastroEdicaoMedico"
-          component={CadastroEdicaoMedicoScreen}
+          component={MedicoFormScreen}
           options={{ title: "Gerenciar Médico" }}
         />
         <Stack.Screen
           name="CadastroEdicaoPaciente"
           component={PacienteFormScreen}
           options={{ title: "Gerenciar Paciente" }}
-        />
-
-        {/* Tela de Construção (Ações dos Cards) */}
-        <Stack.Screen
-          name="EmConstrucao"
-          component={() => (
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Text style={{ fontSize: 24 }}>Em Construção!</Text>
-            </View>
-          )}
-          options={{ title: "Em Construção" }}
         />
       </Stack.Navigator>
     </NavigationContainer>
