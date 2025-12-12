@@ -9,6 +9,7 @@ import {
   Alert,
   Platform,
 } from "react-native";
+import { Picker } from "@react-native-picker/picker";
 
 // Paciente: Nome, Email, Telefone, CPF, Endereço completo
 const initialPacienteState = {

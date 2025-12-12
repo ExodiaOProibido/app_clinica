@@ -227,7 +227,7 @@ const MedicoForm = ({ medico, onSave, onCancel, navigation }) => {
           label="Cidade"
           name="cidade"
           placeholder="Ex: Belo Horizonte"
-          formData={formData} // Correção: Garantir que esta prop também seja passada
+          formData={formData} 
           errors={errors}
           handleChange={handleChange}
         />

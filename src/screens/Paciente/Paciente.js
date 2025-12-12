@@ -12,11 +12,12 @@ import {
   UIManager,
   Button,
   Image,
+  Alert
 } from "react-native";
 
-// Ícones (você precisará ter esses arquivos PNG ou usar uma biblioteca de ícones)
-const IconeLupa = require("../../../assets/lupa.png"); // Exemplo
-const IconeSeta = require("../../../assets/seta.png"); // Exemplo
+
+const IconeLupa = require("../../../assets/lupa.png"); 
+const IconeSeta = require("../../../assets/seta.png"); 
 
 // Habilita LayoutAnimation para Android
 if (Platform.OS === "android") {
@@ -60,8 +61,24 @@ const groupAndFilterPacientes = (pacientes, searchText) => {
 // =========================================================================
 // COMPONENTE CARD EXPANSÍVEL DO PACIENTE
 // =========================================================================
-const PacienteCard = ({ paciente, navigation }) => {
+const PacienteCard = ({ paciente, navigation, onDeactivate }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+
+// Funções de Ação do Card
+ const handleDeactivate = () => {
+ Alert.alert(
+ "Confirmação",
+ `Deseja realmente desativar o perfil de ${paciente.nome}?`,
+ [
+ { text: "Cancelar", style: "cancel" },
+ { 
+ text: "Sim, Desativar", 
+ style: "destructive",
+    onPress: () => onDeactivate(paciente.id) // ⬅️ Chama a função injetada
+ }, 
+ ]
+ );
+ };
 
   const toggleExpand = () => {
     // Anima a mudança de layout
@@ -105,17 +122,17 @@ const PacienteCard = ({ paciente, navigation }) => {
       {isExpanded && (
         <View style={cardStyles.details}>
           <Text style={cardStyles.detailHeader}>Informações de Contato</Text>
-          <Text style={cardStyles.detailText}>Email: **{paciente.email}**</Text>
+          <Text style={cardStyles.detailText}>Email: {paciente.email}</Text>
           <Text style={cardStyles.detailText}>
-            Telefone: **{paciente.telefone}**
+            Telefone: {paciente.telefone}
           </Text>
 
           <Text style={cardStyles.detailHeader}>Endereço Completo</Text>
           <Text style={cardStyles.detailText}>
-            Logradouro: **{formatEndereco(paciente)}**
+            Logradouro: {formatEndereco(paciente)}
           </Text>
           <Text style={cardStyles.detailText}>
-            Local: **{formatCidade(paciente)}**
+            Local: {formatCidade(paciente)}
           </Text>
 
           <View style={cardStyles.actionButtons}>
@@ -127,11 +144,7 @@ const PacienteCard = ({ paciente, navigation }) => {
                 })
               }
             />
-            <Button
-              title="Remover Paciente"
-              color="red"
-              onPress={() => navigation.navigate("EmConstrucao")}
-            />
+            <Button title="Remover Paciente" color="red" onPress={handleDeactivate}/>
           </View>
         </View>
       )}
@@ -142,14 +155,14 @@ const PacienteCard = ({ paciente, navigation }) => {
 // =========================================================================
 // TELA PRINCIPAL (LISTAGEM DE PACIENTES)
 // =========================================================================
-const PacienteOp1Screen = ({ navigation, pacientes }) => {
+const PacienteOp1Screen = ({ navigation, pacientes, onDeactivate }) => {
   const [searchText, setSearchText] = useState("");
-
+const activePacientes = pacientes.filter(p => p.status !== false);
   // Use useMemo para recalcular as seções apenas quando 'pacientes' ou 'searchText' mudar
-  const sections = useMemo(
-    () => groupAndFilterPacientes(pacientes, searchText),
-    [pacientes, searchText]
-  );
+const sections = useMemo(
+  () => groupAndFilterPacientes(activePacientes, searchText), 
+  [activePacientes, searchText]
+ );
 
   return (
     <View style={styles.container}>
@@ -169,7 +182,7 @@ const PacienteOp1Screen = ({ navigation, pacientes }) => {
           sections={sections}
           keyExtractor={(item, index) => item.cpf + index}
           renderItem={({ item }) => (
-            <PacienteCard paciente={item} navigation={navigation} />
+            <PacienteCard paciente={item} navigation={navigation} onDeactivate={onDeactivate} />
           )}
           renderSectionHeader={({ section: { title } }) => (
             <Text style={styles.sectionHeader}> {title}</Text>

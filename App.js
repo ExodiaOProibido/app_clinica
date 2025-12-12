@@ -40,6 +40,7 @@ function App() {
       cidade: "BH",
       uf: "MG",
       cep: "30110-001",
+      status: true
     },
     {
       id: 2,
@@ -55,6 +56,7 @@ function App() {
       cidade: "BH",
       uf: "MG",
       cep: "30110-002",
+      status: true
     },
     {
       id: 3,
@@ -70,6 +72,7 @@ function App() {
       cidade: "São Paulo",
       uf: "SP",
       cep: "05407-000",
+      status: true
     },
   ]);
 
@@ -88,6 +91,7 @@ function App() {
       cidade: "BH",
       uf: "MG",
       cep: "30110-003",
+      status: true
     },
     {
       id: 102,
@@ -102,38 +106,42 @@ function App() {
       cidade: "São Paulo",
       uf: "SP",
       cep: "01414-000",
+      status: true
     },
   ]);
   const [consultas, setConsultas] = useState([]);
 
   // --- FUNÇÕES DE NAVEGAÇÃO E PROPS ---
 
-  // Função para injetar a lista de médicos na tela de listagem
   const MedicoList = (props) => (
-    // Usa o componente de listagem de médico (assumido)
-    <MedicoOp1Screen {...props} medicos={medicos} />
+    <MedicoOp1Screen {...props} medicos={medicos} onDeactivate={handleDeactivateMedico}/>
   );
 
   // Função para injetar a lista de pacientes na tela de listagem
   const PacienteList = (props) => (
-    // Usa o componente de listagem de paciente (assumido)
-    <PacienteOp1Screen {...props} pacientes={pacientes} />
+    <PacienteOp1Screen {...props} pacientes={pacientes} onDeactivate={handleDeactivatePaciente} />
   );
   // Função para lidar com o salvamento/edição de medicos
   const handleSaveMedico = (medicoData) => {
     if (medicoData.id) {
-      // Lógica de Edição (Mock): Atualiza o médico existente
       setMedicos((prev) =>
         prev.map((m) => (m.id === medicoData.id ? medicoData : m))
       );
     } else {
-      // Lógica de Cadastro (Mock): Cria um novo ID e adiciona
-      // Gera um novo ID baseado no maior ID existente
+
       const newId = Math.max(...medicos.map((m) => m.id), 0) + 1;
-      setMedicos((prev) => [...prev, { ...medicoData, id: newId }]);
+      setMedicos((prev) => [...prev, { ...medicoData, id: newId, status: true}]);
     }
     console.log("Médico salvo com sucesso:", medicoData);
   };
+
+// Função para desativar (deletar lógico) um médico
+const handleDeactivateMedico = (id) => {
+ setMedicos((prev) =>
+ prev.map((m) => (m.id === id ? { ...m, status: false } : m))
+ );
+ console.log(`Médico ID ${id} desativado.`);
+};
 
   // Função para lidar com o salvamento/edição de pacientes
   const handleSavePaciente = (pacienteData) => {
@@ -143,9 +151,16 @@ function App() {
       );
     } else {
       const newId = Math.max(...pacientes.map((p) => p.id), 0) + 1;
-      setPacientes((prev) => [...prev, { ...pacienteData, id: newId }]);
+      setPacientes((prev) => [...prev, { ...pacienteData, id: newId, status: true }]);
     }
   };
+// Função para desativar (deletar lógico) um paciente
+const handleDeactivatePaciente = (id) => {
+ setPacientes((prev) =>
+  prev.map((p) => (p.id === id ? { ...p, status: false } : p))
+ );
+ console.log(`Paciente ID ${id} desativado.`);
+};
 
   // Componente wrapper para injetar a função onSave no formulário de paciente
   const PacienteFormScreen = (props) => (
