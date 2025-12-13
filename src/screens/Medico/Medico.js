@@ -58,23 +58,24 @@ const groupAndFilterMedicos = (medicos, searchText) => {
 // COMPONENTE CARD EXPANSÍVEL DO MÉDICO (Refatorado)
 // =========================================================================
 
+
 const MedicoCard = ({ medico, navigation, onDeactivate }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const endereco = medico.endereco;
+const endereco = medico.endereco;
 
-  const formatEndereco = (endereco) => {
-    if (!endereco) return "Endereço indisponível.";
-    // Acessa as propriedades dentro do objeto 'endereco'
-    return `${endereco.logradouro}, ${endereco.numero}${
-      endereco.complemento ? " - " + endereco.complemento : ""
-    }`;
-  };
+const formatEndereco = (endereco) => {
+  if (!endereco) return "Endereço indisponível.";
+  // Acessa as propriedades dentro do objeto 'endereco'
+  return `${endereco.logradouro}, ${endereco.numero}${
+    endereco.complemento ? " - " + endereco.complemento : ""
+  }`;
+};
 
-  const formatCidade = (endereco) => {
-    if (!endereco) return "";
-    // Acessa as propriedades dentro do objeto 'endereco'
-    return `${endereco.bairro}, ${endereco.cidade}/${endereco.uf} - CEP: ${endereco.cep}`;
-  };
+const formatCidade = (endereco) => {
+  if (!endereco) return "";
+  // Acessa as propriedades dentro do objeto 'endereco'
+  return `${endereco.bairro}, ${endereco.cidade}/${endereco.uf} - CEP: ${endereco.cep}`;
+};
 
   const toggleExpand = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
