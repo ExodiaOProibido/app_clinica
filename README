@@ -1,0 +1,25 @@
+FEITO POR:
+
+Hugo de Oliveira Porcari
+Guilhermi Enrique da Silva
+João Vitor Tamos de Jesus
+
+COMO RODAR O PROJETO:
+
+1- Clonar o repositorio do Github no local desejado ultilizando o comando "git clone https://github.com/ExodiaOProibido/app_clinica.git"
+2- Abra o projeto no Visual Studio Code
+3- Abra a seguinte pasta no computador: C:\Program Files\MySQL\MySQL Server 8.0\bin
+4- rodar no cmd: mysql -u root -p
+5- rodar no cmd: CREATE DATABASE medpro_api;
+6- rodar no cmd: USE medpro_api;
+7- rodar no cmd: SHOW DATABASES; (para confirmar se foi criado corretamente)
+8- rodar no cmd: "show tables;" (para confirmar a criação de tables)
+9- rodar no cmd: ./mvnw spring-boot:run
+
+COMO RODAR NO MOBILE
+
+1- Conectar seu celular na rede linksys
+2- Instalar o aplicativo ExpoGo no seu celular
+3- Rodar o comando em um cmd separado "npm install expo-cli"
+4- Rodar o comando em um cmd separado "npx expo run"
+5- Scanear o QR code que aparece no console utilizando o aplicativo ExpoGo
