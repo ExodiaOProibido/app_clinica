@@ -37,23 +37,22 @@ const MenuScreen = ({ navigation }) => {
           onPress={() => navigation.navigate('Consultas')}
         />
       </View>
-      {/* A criação de interfaces gráficas da aplicação mobile baseadas em UX é uma capacidade técnica abordada [1] */}
     </View>
   );
 };
 const styles = StyleSheet.create({
   container: {flex:1,flexDirection: 'column', 
-    justifyContent: 'flex-start', // Começa do topo
-    padding: 20, // Aumentei o padding para dar um respiro lateral e no topo
+    justifyContent: 'flex-start', 
+    padding: 20, 
     backgroundColor: '#fff'},
   logo: {
-    // Definimos a largura em relação ao contêiner
+
     width:'50%',
-    // Altura fixa ou um percentual menor, já que flex:1 foi removido
+
     height: 100, 
     resizeMode: 'contain',
-    alignSelf: 'left', // Centraliza a imagem horizontalmente
-    marginBottom: 1, // Espaçamento entre o logo e o header
+    alignSelf: 'left', 
+    marginBottom: 1, 
   },
   header: { fontSize: 12, textAlign: 'left', fontWeight:'bold' },
   btns : {marginTop:60, flex:1}

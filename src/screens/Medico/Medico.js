@@ -143,7 +143,7 @@ const formatCidade = (endereco) => {
             <Button
               title="Desativar Perfil"
               color="red"
-              onPress={handleDeactivate} // ⬅️ Usa a função de confirmação
+              onPress={handleDeactivate} 
             />
           </View>
         </View>
@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f5f5f5",
     paddingVertical: 5,
     paddingHorizontal: 10,
-    color: "#007AFF", // Mantido azul para Médico
+    color: "#007AFF", 
   },
   fixedButtonContainer: {
     padding: 10,
@@ -280,10 +280,9 @@ const cardStyles = StyleSheet.create({
   nome: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#007AFF", // Cor principal de Médico
+    color: "#007AFF", 
   },
   infoSecundaria: {
-    // Novo estilo adaptado de Paciente
     fontSize: 14,
     color: "#555",
   },
@@ -298,7 +297,6 @@ const cardStyles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: "#eee",
   },
-  // NOVO: Cabeçalho de detalhes para organizar a informação (ex: Contato, Endereço)
   detailHeader: {
     fontSize: 15,
     fontWeight: "bold",
@@ -316,7 +314,7 @@ const cardStyles = StyleSheet.create({
   actionButtons: {
     flexDirection: "row",
     justifyContent: "space-around",
-    marginTop: 15, // Aumentado para dar espaço após o endereço
+    marginTop: 15, 
     paddingTop: 10,
     borderTopWidth: 1,
     borderTopColor: "#eee",

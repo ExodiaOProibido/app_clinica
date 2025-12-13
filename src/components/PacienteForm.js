@@ -198,7 +198,7 @@ const PacienteForm = ({ paciente, onSave, onCancel, navigation }) => {
             style={formStyles.inputThreeQuarter}
             formData={formData}
             errors={errors}
-            handleChange={handleChange} // Note: 'complemento' não é obrigatório, mas está em requiredFields, considere remover se for opcional.
+            handleChange={handleChange} 
           />
         </View>
         <ValidatedInput

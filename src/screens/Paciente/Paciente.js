@@ -29,7 +29,6 @@ if (Platform.OS === "android") {
 // FUNÇÃO AUXILIAR PARA AGRUPAR E FILTRAR OS DADOS
 // =========================================================================
 const groupAndFilterPacientes = (pacientes, searchText) => {
-  // 🎯 Filtra por Nome ou CPF (adaptado para Paciente)
   const filteredPacientes = pacientes.filter(
     (paciente) =>
       paciente.nome.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -37,7 +36,6 @@ const groupAndFilterPacientes = (pacientes, searchText) => {
   );
 
   const grouped = filteredPacientes.reduce((acc, paciente) => {
-    // Agrupa pela primeira letra do Nome
     const firstLetter = paciente.nome[0].toUpperCase();
     if (!acc[firstLetter]) {
       acc[firstLetter] = [];
@@ -48,7 +46,7 @@ const groupAndFilterPacientes = (pacientes, searchText) => {
 
   // Converte o objeto agrupado para o formato do SectionList
   const sections = Object.keys(grouped)
-    .sort() // Garante a ordem alfabética das seções
+    .sort() 
     .map((letter) => ({
       title: letter,
       data: grouped[letter],
@@ -73,7 +71,7 @@ const PacienteCard = ({ paciente, navigation, onDeactivate }) => {
         {
           text: "Sim, Desativar",
           style: "destructive",
-          onPress: () => onDeactivate(paciente.id), // ⬅️ Chama a função injetada
+          onPress: () => onDeactivate(paciente.id), 
         },
       ]
     );
@@ -165,7 +163,6 @@ const PacienteCard = ({ paciente, navigation, onDeactivate }) => {
 const PacienteOp1Screen = ({ navigation, pacientes, onDeactivate }) => {
   const [searchText, setSearchText] = useState("");
   const activePacientes = pacientes.filter((p) => p.ativo !== false);
-  // Use useMemo para recalcular as seções apenas quando 'pacientes' ou 'searchText' mudar
   const sections = useMemo(
     () => groupAndFilterPacientes(activePacientes, searchText),
     [activePacientes, searchText]
@@ -200,7 +197,6 @@ const PacienteOp1Screen = ({ navigation, pacientes, onDeactivate }) => {
           )}
           contentContainerStyle={styles.sectionListContent}
           stickySectionHeadersEnabled={true}
-          // Exibe uma mensagem se a lista estiver vazia
           ListEmptyComponent={() => (
             <Text style={styles.emptyListText}>
               Nenhum paciente encontrado.
@@ -261,7 +257,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f5f5f5",
     paddingVertical: 5,
     paddingHorizontal: 10,
-    color: "#007AFF", // Destaque para a letra inicial
+    color: "#007AFF", 
   },
   fixedButtonContainer: {
     padding: 10,
@@ -297,17 +293,16 @@ const cardStyles = StyleSheet.create({
   nome: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#28A745", // Usei um verde diferente para distinguir de Médico (azul)
+    color: "#28A745", 
   },
   infoSecundaria: {
-    // Substitui especialidade
     fontSize: 14,
     color: "#555",
   },
   arrowIcon: {
     width: 15,
     height: 15,
-    tintColor: "#28A745", // Cor do ícone combinando
+    tintColor: "#28A745", 
   },
   details: {
     padding: 15,

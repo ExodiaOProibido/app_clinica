@@ -15,7 +15,7 @@ import PacienteOp1Screen from "./src/screens/Paciente/Paciente";
 import CadastroEdicaoMedicoScreen from "./src/screens/Medico/CadastroEdicaoMedicoScreen";
 import CadastroEdicaoPacienteScreen from "./src/screens/Paciente/CadastroEdicaoPacienteScreen";
 
-const API_BASE_URL = "http://10.110.12.10:8089";
+const API_BASE_URL = "http://10.110.12.29:8089";
 
 const Stack = createStackNavigator();
 

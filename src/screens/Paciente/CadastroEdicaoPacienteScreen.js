@@ -1,10 +1,9 @@
 // src/screens/Paciente/CadastroEdicaoPacienteScreen.js
 import React from "react";
-// ⚠️ ATENÇÃO: Verifique se o caminho e o nome do seu componente de formulário de paciente estão corretos
 import PacienteForm from "../../components/PacienteForm";
 import { View } from "react-native";
 
-// Este componente recebe 'onSave' como prop injetada pelo App.js
+
 const CadastroEdicaoPacienteScreen = ({ route, navigation, onSave }) => {
   // A prop 'paciente' virá via route.params
   const { paciente } = route.params || {}; 

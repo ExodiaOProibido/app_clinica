@@ -20,11 +20,9 @@ const Splash = ({ navigation }) => {
   );
 };
 
-// Crie seus estilos usando StyleSheet.create
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // Note que as propriedades de layout e valores são sem aspas (exceto cores)
     justifyContent: 'center', 
     alignItems: 'center',
     backgroundColor: '#fff',
@@ -32,13 +30,13 @@ const styles = StyleSheet.create({
   title: {
     textAlign: 'center',
     fontSize: 16, 
-    fontWeight: 'bold', // Use 'bold' como string ou o número (ex: '700')
+    fontWeight: 'bold', 
   },
   logo: {
-    // ESSENCIAL para imagens locais: definir width e height
+
     width: '70%', 
     height: '70%',
-    resizeMode: 'contain'    // Você também pode usar valores absolutos: width: 200, height: 200,
+    resizeMode: 'contain'   
   },
 });
 export default Splash;
