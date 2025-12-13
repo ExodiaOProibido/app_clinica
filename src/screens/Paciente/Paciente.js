@@ -12,12 +12,11 @@ import {
   UIManager,
   Button,
   Image,
-  Alert
+  Alert,
 } from "react-native";
 
-
-const IconeLupa = require("../../../assets/lupa.png"); 
-const IconeSeta = require("../../../assets/seta.png"); 
+const IconeLupa = require("../../../assets/lupa.png");
+const IconeSeta = require("../../../assets/seta.png");
 
 // Habilita LayoutAnimation para Android
 if (Platform.OS === "android") {
@@ -64,21 +63,21 @@ const groupAndFilterPacientes = (pacientes, searchText) => {
 const PacienteCard = ({ paciente, navigation, onDeactivate }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-// Funções de Ação do Card
- const handleDeactivate = () => {
- Alert.alert(
- "Confirmação",
- `Deseja realmente desativar o perfil de ${paciente.nome}?`,
- [
- { text: "Cancelar", style: "cancel" },
- { 
- text: "Sim, Desativar", 
- style: "destructive",
-    onPress: () => onDeactivate(paciente.id) // ⬅️ Chama a função injetada
- }, 
- ]
- );
- };
+  // Funções de Ação do Card
+  const handleDeactivate = () => {
+    Alert.alert(
+      "Confirmação",
+      `Deseja realmente desativar o perfil de ${paciente.nome}?`,
+      [
+        { text: "Cancelar", style: "cancel" },
+        {
+          text: "Sim, Desativar",
+          style: "destructive",
+          onPress: () => onDeactivate(paciente.id), // ⬅️ Chama a função injetada
+        },
+      ]
+    );
+  };
 
   const toggleExpand = () => {
     // Anima a mudança de layout
@@ -86,16 +85,20 @@ const PacienteCard = ({ paciente, navigation, onDeactivate }) => {
     setIsExpanded(!isExpanded);
   };
 
-  // Funções auxiliares para formatar o endereço
-  const formatEndereco = (p) => {
-    // Assumindo que os dados do paciente incluem o endereço completo
-    return `${p.logradouro}, ${p.numero}${
-      p.complemento ? " - " + p.complemento : ""
+  const endereco = paciente.endereco;
+
+  const formatEndereco = (endereco) => {
+    if (!endereco) return "Endereço indisponível.";
+    // Acessa as propriedades dentro do objeto 'endereco'
+    return `${endereco.logradouro}, ${endereco.numero}${
+      endereco.complemento ? " - " + endereco.complemento : ""
     }`;
   };
 
-  const formatCidade = (p) => {
-    return `${p.bairro}, ${p.cidade}/${p.uf} - CEP: ${p.cep}`;
+  const formatCidade = (endereco) => {
+    if (!endereco) return "";
+    // Acessa as propriedades dentro do objeto 'endereco'
+    return `${endereco.bairro}, ${endereco.cidade}/${endereco.uf} - CEP: ${endereco.cep}`;
   };
 
   return (
@@ -105,7 +108,7 @@ const PacienteCard = ({ paciente, navigation, onDeactivate }) => {
         <View>
           <Text style={cardStyles.nome}>{paciente.nome}</Text>
           {/* Mostra o CPF logo abaixo do nome */}
-          <Text style={cardStyles.infoSecundaria}>CPF: {paciente.cpf}</Text>
+          <Text style={cardStyles.valor}>CPF: {paciente.cpf}</Text>
         </View>
 
         {/* Ícone triangular para expandir/colapsar */}
@@ -129,10 +132,10 @@ const PacienteCard = ({ paciente, navigation, onDeactivate }) => {
 
           <Text style={cardStyles.detailHeader}>Endereço Completo</Text>
           <Text style={cardStyles.detailText}>
-            Logradouro: {formatEndereco(paciente)}
+            Logradouro: {formatEndereco(endereco)}
           </Text>
           <Text style={cardStyles.detailText}>
-            Local: {formatCidade(paciente)}
+            Local: {formatCidade(endereco)}
           </Text>
 
           <View style={cardStyles.actionButtons}>
@@ -144,7 +147,11 @@ const PacienteCard = ({ paciente, navigation, onDeactivate }) => {
                 })
               }
             />
-            <Button title="Remover Paciente" color="red" onPress={handleDeactivate}/>
+            <Button
+              title="Remover Paciente"
+              color="red"
+              onPress={handleDeactivate}
+            />
           </View>
         </View>
       )}
@@ -157,12 +164,12 @@ const PacienteCard = ({ paciente, navigation, onDeactivate }) => {
 // =========================================================================
 const PacienteOp1Screen = ({ navigation, pacientes, onDeactivate }) => {
   const [searchText, setSearchText] = useState("");
-const activePacientes = pacientes.filter(p => p.status !== false);
+  const activePacientes = pacientes.filter((p) => p.ativo !== false);
   // Use useMemo para recalcular as seções apenas quando 'pacientes' ou 'searchText' mudar
-const sections = useMemo(
-  () => groupAndFilterPacientes(activePacientes, searchText), 
-  [activePacientes, searchText]
- );
+  const sections = useMemo(
+    () => groupAndFilterPacientes(activePacientes, searchText),
+    [activePacientes, searchText]
+  );
 
   return (
     <View style={styles.container}>
@@ -182,7 +189,11 @@ const sections = useMemo(
           sections={sections}
           keyExtractor={(item, index) => item.cpf + index}
           renderItem={({ item }) => (
-            <PacienteCard paciente={item} navigation={navigation} onDeactivate={onDeactivate} />
+            <PacienteCard
+              paciente={item}
+              navigation={navigation}
+              onDeactivate={onDeactivate}
+            />
           )}
           renderSectionHeader={({ section: { title } }) => (
             <Text style={styles.sectionHeader}> {title}</Text>

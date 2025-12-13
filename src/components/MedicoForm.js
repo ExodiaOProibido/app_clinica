@@ -13,13 +13,10 @@ import { Picker } from "@react-native-picker/picker";
 
 // Lista de Especialidades para o Picker
 const especialidades = [
-  "Cardiologia",
-  "Pediatria",
-  "Dermatologia",
-  "Ginecologia",
-  "Neurologia",
-  "Oftalmologia",
-  "Clínica Geral",
+  "ORTOPEDIA",
+  "CARDIOLOGIA",
+  "GINECOLOGIA",
+  "DERMATOLOGIA",
 ];
 
 const initialMedicoState = {
@@ -104,16 +101,17 @@ const MedicoForm = ({ medico, onSave, onCancel, navigation }) => {
     return valid;
   };
 
-  const handleSubmit = () => {
+  // Trecho do handleSubmit no MedicoForm.js
+  const handleSubmit = async () => {
     if (validate()) {
-      onSave(formData);
-      Alert.alert(
-        isEditing ? "Sucesso" : "Cadastro Concluído",
-        isEditing
-          ? "Dados do médico atualizados."
-          : "Novo médico cadastrado com sucesso!"
-      );
-      navigation.goBack();
+      // Assume que onSave chama handleSaveMedico no App.js
+      const success = await onSave(formData);
+      if (success) {
+        // Navega de volta APÓS o sucesso da API
+        navigation.goBack();
+      } else {
+        // A função handleSaveMedico já deve exibir o Alert de erro
+      }
     } else {
       Alert.alert("Erro", "Por favor, preencha todos os campos obrigatórios.");
     }
@@ -227,7 +225,7 @@ const MedicoForm = ({ medico, onSave, onCancel, navigation }) => {
           label="Cidade"
           name="cidade"
           placeholder="Ex: Belo Horizonte"
-          formData={formData} 
+          formData={formData}
           errors={errors}
           handleChange={handleChange}
         />
